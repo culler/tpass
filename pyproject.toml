@@ -1,10 +1,11 @@
 [build-system]
-requires = ["chafe", "setuptools"]
+requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "tpass"
 dynamic = ["version"]
+dependencies = ["chafe", "tomlkit"]
 description = "A terminal based password manager."
 readme = {file = "README.rst", content-type = "text/x-rst"}
 authors = [
