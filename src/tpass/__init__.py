@@ -32,10 +32,22 @@ is started for creating or editing account information.
 #Commands are "update" ??? 
 
 if sys.platform == 'darwin':
-    def copy_as_clip(text):
-        proc = subprocess.Popen(['/usr/bin/pbcopy'], stdin=subprocess.PIPE)
-        proc.communicate(text.encode('utf-8'))
+    clip_command = ['/usr/bin/pbcopy']
+elif sys.platform in ('linux', 'linux2'):
+    clip_command = ['/usr/bin/xsel', '-i', '-c']
+else:
+    clip_command = ['clip']
+    
+def copy_as_clip(text):
+    proc = subprocess.Popen(clip_command, stdin=subprocess.PIPE)
+    proc.communicate(text.encode('utf-8'))
         
+if sys.platform == 'linux':
+    def copy_as_clip(text):
+        proc = subprocess.Popen(['/usr/bin/xsel', '-i', '-c'],
+            stdin=subprocess.PIPE)
+        proc.communicate(text.encode('utf-8'))
+
 def main():
     nargs = len(sys.argv)
     if nargs > 2:
