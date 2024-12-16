@@ -1,0 +1,35 @@
+[build-system]
+requires = ["chafe", "setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tpass"
+dynamic = ["version"]
+description = "A terminal based password manager."
+readme = {file = "README.rst", content-type = "text/x-rst"}
+authors = [
+    { name="Marc Culler", email="culler@users.noreply.github.com" },
+]
+maintainers = [
+    { name="Marc Culler", email="culler@users.noreply.github.com" },
+]
+requires-python = ">=3.8"
+keywords = ["password", "manager"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Topic :: Utilities"
+]
+
+[project.scripts]
+tpass = "tpass:main"
+
+[project.urls]
+"Homepage" = "https://github.com/culler/tpass"
+"Bug Tracker" = "https://github.com/culler/tpass/issues"
+
+[tool.setuptools.dynamic]
+version = {attr = "tpass.__version__"}
