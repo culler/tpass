@@ -1,7 +1,7 @@
 """
 TPass
 """
-__version__ = '1.0a4'
+__version__ = '1.0a5'
 
 import os
 import sys
@@ -34,7 +34,7 @@ is started for creating or editing account information.
 if sys.platform == 'darwin':
     clip_command = ['/usr/bin/pbcopy']
 elif sys.platform in ('linux', 'linux2'):
-    clip_command = ['/usr/bin/xsel', '-i', '-c']
+    clip_command = ['/usr/bin/xsel', '-p']
 else:
     clip_command = ['clip']
     
@@ -42,12 +42,6 @@ def copy_as_clip(text):
     proc = subprocess.Popen(clip_command, stdin=subprocess.PIPE)
     proc.communicate(text.encode('utf-8'))
         
-if sys.platform == 'linux':
-    def copy_as_clip(text):
-        proc = subprocess.Popen(['/usr/bin/xsel', '-i', '-c'],
-            stdin=subprocess.PIPE)
-        proc.communicate(text.encode('utf-8'))
-
 def main():
     nargs = len(sys.argv)
     if nargs > 2:
