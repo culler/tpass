@@ -14,7 +14,7 @@ authors = [
 maintainers = [
     { name="Marc Culler", email="culler@users.noreply.github.com" },
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 keywords = ["password", "manager"]
 classifiers = [
     "Development Status :: 3 - Alpha",
