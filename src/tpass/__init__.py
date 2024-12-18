@@ -27,6 +27,10 @@ class TPass:
         self.context.encrypt_file_from_bytes(plaintext, self.filename)
 
     def add_account(self, account):
+        """
+        Add a new table to the toml document, ensuring that the
+        required keys exist.
+        """
         new_account = tomlkit.table()
         print('Creating a new account named', account)
         print('The domain, username and password fields are required.')
@@ -47,80 +51,6 @@ class TPass:
         new_account.add('password', password)
         self.data[account] = new_account
         self.save()
-
-    def interact(self):
-        depth, account, key, value, changed = 0, '', '', '', False
-        while True:
-            match depth:
-                case 0: # Choose Account
-                    print('Type ? to view accounts, <Enter> to continue.')
-                    match input('> '):
-                        case '?':
-                            for account in sorted(self.data.keys()):
-                                print(account)
-                        case '':
-                            account = input('account: ')
-                            if not account:
-                                break
-                            if account not in self.data:
-                                self.add_account(account)
-                            depth = 1
-                        case _:
-                            break
-                case 1:  #  Delete the account or choose a key
-                    print('Type ? to view %s, delete to delete it, '
-                              '<Enter> to continue.' % account)
-                    match input('> '):
-                        case '?':
-                            for key in self.data[account]:
-                                if key == 'password':
-                                    value = '<hidden>'
-                                else:
-                                    value = self.data[account][key]
-                                print('  %s = "%s"' % (key, value))
-                        case '':
-                            key = input('key: ')
-                            depth = 2 if key else 0
-                            print('1: set depth to', depth)
-                        case 'delete':
-                            self.data.pop(account)
-                            changed = True
-                            depth = 0
-                        case _:
-                            depth = 0
-                case 2: # Delete the key or set its value
-                    if key not in ('userid', 'password'):
-                        print('Type delete to delete %s, '
-                              '<Enter> to set its value.' % key)
-                        match input('> '):
-                            case '':
-                                value = input('value: ')
-                            case 'delete':
-                                self.data[account].pop(key)
-                                changed = True
-                                value = ''
-                                depth = 1
-                            case _:
-                                value = ''
-                                depth = 0                                
-                    else:
-                        value = input('value: ')
-                    if value:
-                        stripped = value.strip('"')
-                        if len(stripped) < len(value):
-                            print('Quotation marks are not needed, '
-                                  'and will be removed.')
-                        value = stripped
-                        self.data[account][key] = value
-                        changed = True
-                        key = input('key: ')
-                        if not key:
-                            depth = 0
-                        print('2: set depth to', depth)
-                    else:
-                        depth = 0
-        if changed:
-            self.save()
 
 usage = """Usage: tpass <account>
 The userid for the specified account is printed and the password is
