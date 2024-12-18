@@ -27,6 +27,8 @@ classifiers = [
 
 [project.scripts]
 tpass = "tpass:main"
+tpass-setup = "tpass.setup:main"
+tpass-edit = "tpass.edit:main"
 
 [project.urls]
 "Homepage" = "https://github.com/culler/tpass"
