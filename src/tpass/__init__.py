@@ -1,7 +1,7 @@
 """
 TPass
 """
-__version__ = '1.0a5'
+__version__ = '1.0b0'
 
 import os
 import sys
