@@ -1,4 +1,7 @@
-PYTHON=${HOME}/venvs/py312/Scripts/python
+PYTHON=${HOME}/venvs/py312/bin/python
+# Windows
+# PYTHON=${HOME}/venvs/py312/Scripts/python
+
 .PHONY: usage clean dist testpypi-upload pypi-upload
 
 usage:
