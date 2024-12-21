@@ -7,6 +7,7 @@ def main():
     while True:
         match depth:
             case 0: # Choose Account
+                print('')
                 print('Type ? to view accounts, <Enter> to continue, '
                       'Q to quit.')
                 match input('> '):

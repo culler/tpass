@@ -1,7 +1,7 @@
 """
 TPass
 """
-__version__ = '1.0b0'
+__version__ = '1.0b1'
 
 import os
 import sys
@@ -13,7 +13,10 @@ from .totp import TOTPGenerator
 
 class TPass:
     def __init__(self):
-        home = os.environ['HOME']
+        if sys.platform == 'win32':
+            home = os.environ['USERPROFILE']
+        else:
+            home = os.environ['HOME']
         self.filename = filename = os.path.join(home, '.accounts.cha')
         if not os.path.exists(filename):
             print('The encrypted credentials file does not exist.')
@@ -33,17 +36,17 @@ class TPass:
         """
         new_account = tomlkit.table()
         print('Creating a new account named', account)
-        print('The domain, username and password fields are required.')
+        print('The domain, userid and password fields are required.')
         domain = input('domain: ')
         if not domain:
             print('Aborting.')
             return
         new_account.add('domain', domain)
-        username = input('username: ')
-        if not username:
+        userid = input('userid: ')
+        if not userid:
             print('Aborting.')
             return
-        new_account.add('username', username)
+        new_account.add('userid', userid)
         password = input('password: ')
         if not password:
             print('Aborting.')
@@ -73,7 +76,7 @@ elif sys.platform in ('linux', 'linux2'):
     else:
         print("An X11 or Wayland server is required to use the clipboard.")
 else:
-    clip_command = ['clip']
+    clip_commands = ['clip']
     
 def copy_as_clip(text):
     for command in clip_commands:

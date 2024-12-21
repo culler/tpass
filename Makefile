@@ -1,3 +1,4 @@
+PYTHON=${HOME}/venvs/py312/Scripts/python
 .PHONY: usage clean dist testpypi-upload pypi-upload
 
 usage:
@@ -6,7 +7,7 @@ usage:
 
 dist:
 # Unset PIP_CONFIG_FILE in case pip.conf sets user = True
-	env PIP_CONFIG_FILE=/dev/null python3 -m build --sdist --wheel .
+	env PIP_CONFIG_FILE=/dev/null ${PYTHON} -m build --sdist --wheel .
 
 clean:
 	rm -rf build dist */*.egg-info
@@ -14,7 +15,7 @@ clean:
 	rm -f src/_chacha/_chacha.c
 
 testpypi-upload:
-	python3 -m twine upload --verbose --repository testpypi dist/*
+	${PYTHON} -m twine upload --verbose --repository testpypi dist/*
 
 pypi-upload:
-	python3 -m twine upload dist/*
+	${PYTHON} -m twine upload dist/*

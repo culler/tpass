@@ -5,7 +5,8 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "tpass"
 dynamic = ["version"]
-dependencies = ["chafe", "tomlkit"]
+dependencies = ["chafe", "tomlkit",
+	     "pyreadline3 ; platform_system == 'Windows'"]
 description = "A terminal based password manager."
 readme = {file = "README.rst", content-type = "text/x-rst"}
 authors = [
