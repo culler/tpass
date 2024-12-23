@@ -8,27 +8,26 @@ def main():
         match depth:
             case 0: # Choose Account
                 print('')
-                print('Type ? to view accounts, <Enter> to continue, '
-                      'Q to quit.')
-                match input('> '):
+                print('Type ? to view accounts or Q to quit.') 
+                answer = input('account: ')
+                match answer:
                     case '?':
                         for account in sorted(tpass.data.keys()):
                             print(account)
-                    case '':
-                        account = input('account: ')
+                    case 'Q':
+                        break
+                    case _:
+                        account = answer
                         if not account:
                             break
                         if account not in tpass.data:
                             tpass.add_account(account)
                         depth = 1
-                    case 'Q':
-                        break
-                    case _:
-                        break
             case 1:  #  Delete the account or choose a key
                 print(f'Type ? to view {account}, <Space> to delete it, '
-                          '<Enter> to continue, ^ to go back.')
-                match input('> '):
+                          '^ to go back to accounts.')
+                answer = input('key: ')
+                match answer:
                     case '?':
                         for key in tpass.data[account]:
                             if key == 'password':
@@ -36,9 +35,6 @@ def main():
                             else:
                                 value = tpass.data[account][key]
                             print(f'  {key} = "{value}"')
-                    case '':
-                        key = input('key: ')
-                        depth = 2 if key else 0
                     case '^':
                         account = ''
                         depth = 0
@@ -48,7 +44,8 @@ def main():
                             tpass.data.pop(account)
                             changed = True
                     case _:
-                        depth = 0
+                        key = answer
+                        depth = 2 if key else 0
             case 2: # Delete the key or set its value
                 if key not in ('userid', 'password'):
                     if key in tpass.data[account]:
