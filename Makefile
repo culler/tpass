@@ -1,4 +1,4 @@
-PYTHON=${HOME}/venvs/py312/bin/python
+PYTHON=python
 # Windows
 # PYTHON=${HOME}/venvs/py312/Scripts/python
 

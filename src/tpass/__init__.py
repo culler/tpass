@@ -67,21 +67,55 @@ command.
 """
 
 if sys.platform == 'darwin':
-    clip_commands = [['/usr/bin/pbcopy']]
-elif sys.platform in ('linux', 'linux2'):
-    if "WAYLAND_DISPLAY" in os.environ:
-        clip_commands = [['/usr/bin/wl-copy', '-p'], ['/usr/bin/wl-copy']]
-    elif "DISPLAY" in os.environ:
-        clip_commands = [['/usr/bin/xsel', '-p', '-c']]
-    else:
-        print("An X11 or Wayland server is required to use the clipboard.")
+        def copy_as_clip(text):
+            result = subprocess.run([
+                'defaults', '-currentHost', 'read',
+                'com.apple.coreservices.useractivityd',
+                'ActivityAdvertisingAllowed', '-bool'],
+                                    stdout=subprocess.PIPE)
+            advertising_allowed = (result.stdout == 'on')
+            result = subprocess.run([
+                'defaults', '-currentHost', 'read',
+                'com.apple.coreservices.useractivityd',
+                'ActivityReceivingAllowed', '-bool'],
+                                    stdout=subprocess.PIPE)
+            receiving_allowed = (result.stdout == 'on')
+            if advertising_allowed:
+                subprocess.call([
+                    'defaults', '-currentHost', 'write',
+                    'com.apple.coreservices.useractivityd',
+                    'ActivityAdvertisingAllowed', '-bool', 'no'])
+            if receiving_allowed:
+                subprocess.call([
+                    'defaults', '-currentHost', 'write',
+                    'com.apple.coreservices.useractivityd',
+                    'ActivityReceivingAllowed', '-bool', 'no'])
+            proc = subprocess.Popen(['/usr/bin/pbcopy'], stdin=subprocess.PIPE)
+            proc.communicate(text.encode('utf-8'))
+            if advertising_allowed:
+                subprocess.call([
+                    'defaults', '-currentHost', 'write',
+                    'com.apple.coreservices.useractivityd',
+                    'ActivityAdvertisingAllowed', '-bool', 'yes'])
+            if receiving_allowed:
+                subprocess.call([
+                    'defaults', '-currentHost', 'write',
+                    'com.apple.coreservices.useractivityd',
+                    'ActivityReceivingAllowed', '-bool', 'yes'])
 else:
-    clip_commands = ['clip']
-    
-def copy_as_clip(text):
-    for command in clip_commands:
-        proc = subprocess.Popen(command, stdin=subprocess.PIPE)
-        proc.communicate(text.encode('utf-8'))
+    if sys.platform == 'linux':
+        if "WAYLAND_DISPLAY" in os.environ:
+            clip_commands = [['/usr/bin/wl-copy', '-p'], ['/usr/bin/wl-copy']]
+        elif "DISPLAY" in os.environ:
+            clip_commands = [['/usr/bin/xsel', '-p', '-c']]
+        else:
+            print("An X11 or Wayland server is required to use the clipboard.")
+    else:
+        clip_commands = ['clip']
+    def copy_as_clip(text):
+        for command in clip_commands:
+            proc = subprocess.Popen(command, stdin=subprocess.PIPE)
+            proc.communicate(text.encode('utf-8'))
         
 def main():
     nargs = len(sys.argv)
