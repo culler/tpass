@@ -15,7 +15,6 @@ dist:
 clean:
 	rm -rf build dist */*.egg-info
 	rm -rf `find . -name __pycache__`
-	rm -f src/_chacha/_chacha.c
 
 testpypi-upload:
 	${PYTHON} -m twine upload --verbose --repository testpypi dist/*
