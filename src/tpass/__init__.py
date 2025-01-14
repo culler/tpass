@@ -1,7 +1,7 @@
 """
 TPass
 """
-__version__ = '1.0b3'
+__version__ = '1.0b4'
 
 import os
 import sys
@@ -72,13 +72,13 @@ if sys.platform == 'darwin':
                 'defaults', '-currentHost', 'read',
                 'com.apple.coreservices.useractivityd',
                 'ActivityAdvertisingAllowed', '-bool'],
-                                    stdout=subprocess.PIPE)
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             advertising_allowed = (result.stdout == 'on')
             result = subprocess.run([
                 'defaults', '-currentHost', 'read',
                 'com.apple.coreservices.useractivityd',
                 'ActivityReceivingAllowed', '-bool'],
-                                    stdout=subprocess.PIPE)
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             receiving_allowed = (result.stdout == 'on')
             if advertising_allowed:
                 subprocess.call([
