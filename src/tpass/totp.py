@@ -9,7 +9,7 @@ class TOTPGenerator:
     
     def __init__(self, b32_secret, token_length=6):
         assert(len(b32_secret) % 4 == 0 and token_length in (6, 8))
-        self.key = b32decode(b32_secret)
+        self.key = b32decode(b32_secret.upper())
         self.token_length = token_length
         # We only support sha1.
         self.hash_name = 'sha1'
